@@ -14312,7 +14312,7 @@ public class Client extends RSApplet {
 		clanChatMode = 0;
 		cButtonHPos = -1;
 		cButtonCPos = 0;
-		server = "localhost";
+		server = "35.192.137.94";
 		anIntArrayArray825 = new int[104][104];
 		friendsNodeIDs = new int[200];
 		groundArray = new NodeList[4][104][104];
