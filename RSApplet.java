@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -260,63 +261,90 @@ public class RSApplet extends Applet implements Runnable, MouseListener,
 		shouldClearScreen = true;
 		raiseWelcomeScreen();
 	}
-
-	@Override
-	public final void mousePressed(MouseEvent mouseevent) {
+ public boolean mouseWheelDown;
+	
+	public final void mousePressed(MouseEvent mouseevent)
+	{
+		int type = mouseevent.getButton();
 		int i = mouseevent.getX();
 		int j = mouseevent.getY();
-		if (gameFrame != null) {
-			i -= 4;// 4
-			j -= 22;// 22
+		if(gameFrame != null)
+		{
+			i -= 4;//4
+			j -= 22;//22
 		}
 		idleTime = 0;
 		clickX = i;
 		clickY = j;
 		clickTime = System.currentTimeMillis();
-		if (mouseevent.isMetaDown()) {
+		if (type == 2) {
+		mouseWheelDown = true;
+		mouseWheelX = mouseX;
+		mouseWheelY = mouseY;
+		return;
+		}
+		if(mouseevent.isMetaDown())
+		{
 			clickMode1 = 2;
 			clickMode2 = 2;
-		} else {
+		} else
+		{
 			clickMode1 = 1;
 			clickMode2 = 1;
 		}
 	}
 
-	@Override
-	public final void mouseReleased(MouseEvent mouseevent) {
+	public final void mouseReleased(MouseEvent mouseevent)
+	{
 		idleTime = 0;
 		clickMode2 = 0;
+		mouseWheelDown = false;
 	}
 
-	@Override
-	public final void mouseClicked(MouseEvent mouseevent) {
+	public final void mouseClicked(MouseEvent mouseevent)
+	{
 	}
 
-	@Override
-	public final void mouseEntered(MouseEvent mouseevent) {
+	public final void mouseEntered(MouseEvent mouseevent)
+	{
 	}
 
-	@Override
-	public final void mouseExited(MouseEvent mouseevent) {
+	public final void mouseExited(MouseEvent mouseevent)
+	{
 		idleTime = 0;
 		mouseX = -1;
 		mouseY = -1;
 	}
 
-	@Override
+	
+	public int mouseWheelX;
+	public int mouseWheelY;
+	
 	public final void mouseDragged(MouseEvent mouseevent) {
-		int i = mouseevent.getX();
-		int j = mouseevent.getY();
-		if (gameFrame != null) {
-			i -= 4;
-			j -= 22;
+		
+		int x = mouseevent.getX();
+		int y = mouseevent.getY();
+		if(gameFrame != null) {
+			Insets insets = gameFrame.getInsets();
+			x -= insets.left;//4
+			y -= insets.top;//22
 		}
-		if (System.currentTimeMillis() - clickTime >= 250L
-				|| Math.abs(saveClickX - i) > 5 || Math.abs(saveClickY - j) > 5) {
-			idleTime = 5;
-			mouseX = i;
-			mouseY = j;
+		if (mouseWheelDown) {
+			y = mouseWheelX - mouseevent.getX();
+			int k = mouseWheelY - mouseevent.getY();
+			mouseWheelDragged(y, -k);
+			mouseWheelX = mouseevent.getX();
+			mouseWheelY = mouseevent.getY();
+			return;
 		}
+		idleTime = 0;
+		mouseX = x;
+		mouseY = y;
+		mouseWheelDown = false;
+	}
+
+	void mouseWheelDragged(int param1, int param2) {
+
 	}
 
 	@Override
@@ -334,6 +362,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener,
 			mouseY = j;
 		}
 	}
+
 
 	public static int hotKey = 508;
 

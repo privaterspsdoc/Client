@@ -83,7 +83,12 @@ public class Client extends RSApplet {
 			}
 		}
 	}
-	
+	public	void mouseWheelDragged(int i, int j) {
+		if (!mouseWheelDown)
+			return;
+		this.anInt1186 += i * 3;
+		this.anInt1187 += (j << 1);
+	}
 	private static void setBounds() {
 		Texture.method365(frameWidth, frameHeight);
 		fullScreenTextureArray = Texture.anIntArray1472;
@@ -14312,7 +14317,7 @@ public class Client extends RSApplet {
 		clanChatMode = 0;
 		cButtonHPos = -1;
 		cButtonCPos = 0;
-		server = "35.192.137.94";
+		server = "localhost";
 		anIntArrayArray825 = new int[104][104];
 		friendsNodeIDs = new int[200];
 		groundArray = new NodeList[4][104][104];
